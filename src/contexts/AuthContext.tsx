@@ -20,12 +20,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (username: string, password: string) => {
     // This is a mock login - in a real app, you would validate against a backend
-    if (username === 'admin' && password === '123456') {
+    // if (username === 'admin' && password === '123456') {
       localStorage.setItem('authToken', 'mock-token');
       setIsAuthenticated(true);
-    } else {
-      throw new Error('Invalid credentials');
-    }
+    // } else {
+      // throw new Error('Invalid credentials');
+    // }
   };
 
   const logout = () => {

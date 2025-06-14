@@ -1,105 +1,97 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+import Input from '../components/Input';
+import Button from '../components/Button';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const LoginContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
-  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fb;
 `;
-
-const LoginForm = styled.form`
-  background: white;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+const LoginBox = styled.div`
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(44, 44, 44, 0.08);
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
 `;
-
-const Title = styled.h1`
-  text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
+const FormSection = styled.div`
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 350px;
 `;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 0.75rem;
-  margin-bottom: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+const Title = styled.h2`
+  color: #d26b3a;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+`;
+const Subtitle = styled.p`
+  color: #7c7c7c;
   font-size: 1rem;
-
-  &:focus {
-    outline: none;
-    border-color: #007bff;
-  }
+  margin-bottom: 32px;
 `;
-
-const Button = styled.button`
-  width: 100%;
-  padding: 0.75rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const ErrorMessage = styled.div`
-  color: #dc3545;
-  margin-bottom: 1rem;
-  text-align: center;
+const Illustration = styled.div`
+  background: #d26b3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 320px;
+  min-height: 400px;
 `;
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('123456');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
   const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setLoading(true);
     try {
-      await login(username, password);
+      await login(email, password);
       navigate('/');
-    } catch (err) {
-      setError('Invalid username or password');
+    } catch (err: any) {
+      setError('Credenciais inválidas');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <LoginContainer>
-      <LoginForm onSubmit={handleSubmit}>
-        <Title>Login</Title>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        <Input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button type="submit">Login</Button>
-      </LoginForm>
+      <LoginBox>
+        <FormSection >
+          <img src={'/logo.svg'} alt="Logo" style={{width: 120, marginBottom: 16}} />
+          <Title>Bem-vindo de volta</Title>
+          <Subtitle>Entre com sua conta para acessar o painel.</Subtitle>
+          <form onSubmit={handleSubmit}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: 10}}>
+            <Input label="E-mail" placeholder="seunome@seuservidor.com" type="text" value={email} onChange={e => setEmail(e.target.value)} />
+            <Input label="Senha" placeholder="Digite aqui" type="password" showEye value={password} onChange={e => setPassword(e.target.value)} />
+
+            {error && <div style={{ marginBottom: 8}}>{error}</div>}
+            <Button type="submit" style={{marginTop: 24}} disabled={loading}>{loading ? 'Entrando...' : 'Enviar'}</Button>
+            </div>
+          </form>
+        </FormSection>
+        <Illustration>
+          <img src={'/monitoring 1.png'} alt="Ilustração" style={{width: 320}} />
+        </Illustration>
+      </LoginBox>
     </LoginContainer>
   );
 };
 
-export default Login; 
+export default Login;

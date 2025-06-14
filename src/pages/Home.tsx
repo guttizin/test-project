@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useAuth } from '../contexts/AuthContext';
 import { NavLink, Outlet } from 'react-router-dom';
-import { UserMenu } from './UserMenu';
-
-
+import { UserMenu } from '../components/UserMenu';
 
 const Sidebar = styled.aside`
   width: 210px;
@@ -60,33 +58,9 @@ const MenuItem = styled(NavLink) <{ end?: boolean }>`
   }
 `;
 
-const UserSection = styled.div`
-  padding: 24px 0 24px 32px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #eee;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-`;
-
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: 0.95rem;
-`;
-
 const Main = styled.main`
   flex: 1;
-  background: green;
+  background: #F5F5F5;
   padding: 40px 48px;
   // min-height: 100vh;
   overflow-y: auto;
@@ -121,59 +95,34 @@ const Separator = styled.hr`
   margin: 8px 16px;
 `;
 
+const MenuTitle = styled.div`
+  font-size: 12px;
+  color: #b0b0b0;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  margin: 18px 0 6px 32px;
+`;
+
 const menuItems = [
   { label: 'Dashboard', icon: '/dashboard.svg', path: '/dashboard' },
   { label: 'Eventos', icon: '/calendar.svg', path: '/' },
   { label: 'Equipes', icon: '/team.svg', path: '/equipes' },
-  { label: 'Inscrições', icon: '/inscricoes.svg', path: '/inscricoes' },
-  { label: 'Home2', icon: '/inscricoes.svg', path: '/home2' },
+  { label: 'Inscrições', icon: '/inscricoes.svg', path: '/inscricoes' }
 ];
-
-
-
-const UserInfoSection = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-`;
-
-const Avatar2 = styled.img`
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  object-fit: cover;
-`;
-
-const UserDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const UserName = styled.span`
-  font-weight: 600;
-  font-size: 16px;
-  color: #111827;
-`;
-
-const UserRole = styled.span`
-  font-size: 11px;
-  color: #6B7280;
-`;
-
-
-const handleLogout = () => {
-  alert('Usuário desconectado!');
-};
-
-const handleEditProfile = () => {
-  alert('Redirecionando para a página de edição de perfil...');
-};
 
 const Home: React.FC = () => {
   const { logout } = useAuth();
   // Placeholder user
   const user = { name: 'Kaique Steck', role: 'Administrador' };
+
+  const handleLogout = () => {
+    logout();
+  };
+  
+  const handleEditProfile = () => {
+    alert('Redirecionando para a página de edição de perfil...');
+  };
 
   return (
     <Layout>
@@ -182,6 +131,7 @@ const Home: React.FC = () => {
           <Logo>
             <img src="/logo.svg" alt="Tropa Digital Logo" />
           </Logo>
+          <MenuTitle>Menu</MenuTitle>
           <Menu>
             {menuItems.map((item) => (
               <MenuItem
@@ -198,42 +148,17 @@ const Home: React.FC = () => {
         <Separator />
         <div style={{ display: 'flex', justifyContent: 'center'}}>
           <UserMenu
-            userName="Kaique Steck"
-            userRole="Administrador"
+            userName={user.name}
+            userRole={user.role}
             avatarUrl="https://i.pravatar.cc/42?img=8" // Usando um avatar específico
             onEditProfile={handleEditProfile}
             onLogout={handleLogout}
           />
         </div>
 
-        {/* <UserSection>
-          <UserInfo>
-            <Avatar>
-              <img src="/user.svg" alt="User" style={{ width: 28, height: 28 }} />
-            </Avatar>
-            <div>{user.name}</div>
-            <div style={{ fontSize: '0.85em', color: '#888' }}>{user.role}</div>
-
-            <UserInfoSection>
-              <Avatar2 src="https://i.pravatar.cc/42?img=8" alt={`Avatar de ${user.name}`} />
-              <UserDetails>
-                <UserName>{user.name}</UserName>
-                <UserRole>{user.role}</UserRole>
-              </UserDetails>
-            </UserInfoSection>
-            <div style={{ marginTop: 8, cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={logout}>
-              <img src="/user.svg" alt="Logout" style={{ width: 18, height: 18, marginRight: 6, filter: 'brightness(0) invert(0)' }} />
-              Alterar dados
-            </div>
-            <div style={{ marginTop: 8, cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={logout}>
-              <img src="/logout1.svg" alt="Logout" style={{ width: 18, height: 18, marginRight: 6, filter: 'brightness(0) invert(0)' }} />
-              Sair
-            </div>
-          </UserInfo>
-        </UserSection> */}
       </Sidebar>
       <Main>
-        <Greeting>Bem vindo de volta, <span>Kaique Steck</span></Greeting>
+        <Greeting>Bem vindo de volta, <span>{user.name}</span></Greeting>
         <SectionTitle><span className="icon">←</span>Eventos</SectionTitle>
         <Outlet />
       </Main>

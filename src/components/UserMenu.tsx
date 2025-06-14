@@ -74,12 +74,6 @@ const UserRole = styled.span`
   color:rgba(0, 0, 0, 0.5);
 `;
 
-const Separator = styled.hr`
-  border: none;
-  border-top: 1px solid #E5E7EB;
-  margin: 8px 16px;
-`;
-
 const ActionItem = styled.a`
   display: flex;
   align-items: center;

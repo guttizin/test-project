@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import styled from 'styled-components';
 import Login from './pages/Login';
 import Home from './pages/Home';
-import Home2 from './pages/Home2';
 import Dashboard from './pages/Dashboard';
 import Eventos from './pages/Eventos';
 import Equipes from './pages/Equipes';
@@ -37,10 +36,10 @@ function App() {
               }
             >
               <Route index element={<Eventos />} />
+              <Route path="eventos" element={<Eventos />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="equipes" element={<Equipes />} />
               <Route path="inscricoes" element={<Inscricoes />} />
-              <Route path="home2" element={<Home2 />} />
             </Route>
           </Routes>
         </AppContainer>
